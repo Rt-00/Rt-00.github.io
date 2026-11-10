@@ -211,7 +211,7 @@ callback lands in [penelope](https://github.com/brightio/penelope) (a handler wi
 free):
 
 ```console
-$ penelope
+$ penelope -p 9002
 [+] Shell => librenms@2ba47a043012
 librenms@2ba47a043012:/opt/librenms$ ls /.dockerenv && echo in-container
 /.dockerenv
