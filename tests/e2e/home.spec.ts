@@ -26,7 +26,7 @@ test.describe('home', () => {
     const first = page.locator('main').getByRole('listitem').first();
     await expect(first.locator('a[href^="/posts/"]')).toHaveAttribute(
       'href',
-      /\/posts\/csapp-1-9-temas-importantes\//,
+      /\/posts\/hc-flashback\//,
     );
   });
 
